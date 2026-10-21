@@ -109,10 +109,5 @@
 # print (type(str(num)))
 # string = input("Enter a string:")
 # print (len (string))
-
-x=9
-y=6
-print (type (x))
-print (type (y))        
-print (x/y)
+\
 
