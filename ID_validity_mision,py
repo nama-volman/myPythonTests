@@ -1,3 +1,24 @@
 ID = input("please enter your ID number:")
-if ID.len()==8:
-    
+
+if not ID.isdigit() or not 7 <= len(ID) <= 9:
+    print("error number")
+    exit()
+
+#ניתן לבצע במקום הפעולה ID.zfill(9)
+# if len(ID) == 8:
+#     ID = "0" + ID
+# elif len(ID) == 7:
+#     ID = "00" + ID
+
+# digits = [int(c) for c in ID] 
+
+digits = [int(char) for char in ID.zfill(9)]
+
+total = 0
+for i in range(len(digits)):
+    digit = digits[i] * 2 if i % 2 == 1 else digits[i]
+    if digit > 9:
+        digit = digit % 10 + digit // 10
+    total += digit
+
+print("valid ID" if total % 10 == 0 else "invalid ID")
