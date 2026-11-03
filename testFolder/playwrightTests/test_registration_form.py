@@ -24,10 +24,11 @@ def test_registration_form(page: Page , request):
     #take screenshot
     test_name = request.node.name
     date = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    page.screenshot(path = f"screenshots/{test_name}_{date}.png")
+    page.screenshot(path = f"screenshots/{test_name}_{date}.png", full_page = True)
 
 def test_header(page: Page):
     page.goto(FILE_PATH)
+    page.pause()
     registrationLink(page)
     PreferencesLink(page)
     helpLink(page)
@@ -246,14 +247,10 @@ def helpLink(page):
     helpLink.click()
 
     #printAccessibilityTree(page)
-    dialog = page.get_by_role("dialog", name=REGISTRATION_FORM["modalHeaderText"])
-    expect(dialog).to_be_visible()
-    expect(dialog.get_by_role("heading", level=2, name=REGISTRATION_FORM.get("modalHeaderText"))).to_be_visible()
-
-    dialogOkButton = dialog.get_by_role("button", name=REGISTRATION_FORM.get("modalButtonText"))
-    expect(dialogOkButton).to_be_visible()
-    expect(dialogOkButton).to_be_enabled()
-    dialogOkButton.click()
+    expect(getFormFields(page).get("helpDialog")).to_be_visible()
+    expect(getFormFields(page).get("h2_help_heading")).to_have_text(REGISTRATION_FORM.get('helpDialogHeading'))
+    getFormFields(page).get("closeHelpDialogButton").click()
+    expect(getFormFields(page).get("helpDialog")).to_be_hidden()
 
 def PlaywrightDocsLink(page):
     PlaywrightDocsLink = getFormFields(page).get("PlaywrightDocsLink")
@@ -292,6 +289,10 @@ def getFormFields(page):
         "h2_heading": page.get_by_role("dialog").get_by_role("heading", level=2),
         "closeDialogButton": page.get_by_role("button", name= "Close", exact=True),
         "PreferencesLink": page.get_by_role("link", name="Preferences"),
-        "PlaywrightDocsLink": page.get_by_role("link", name="Playwright documentation")
+        "PlaywrightDocsLink": page.get_by_role("link", name="Playwright documentation"),
+        "helpDialog": page.get_by_role("dialog", name="Form help"),
+        "h2_help_heading": page.get_by_role("dialog").get_by_role("heading", level=2),
+        "closeHelpDialogButton": page.get_by_role("button", name= "Got it", exact=True)
+
 
     }
