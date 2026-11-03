@@ -1,5 +1,6 @@
 REGISTRATION_FORM = {
     "modalHeaderText": "Form help",
+    "helpDialogHeading": "Form help",
     "modalButtonText": "Got it",
     "registrationTargetSection": "#registration",
     "preferencesTargetSection": "#preferences",
