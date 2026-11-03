@@ -1,11 +1,11 @@
 from playwright.sync_api import Page, expect
-
+from datetime import datetime
 from consts import REGISTRATION_FORM
 
 GITHUB_FORM_URL = "https://github.com/yashago/hadasim-qa-pytest/blob/9bcef875b222092b4f32c3599b7773e5d1aca48b/tests/playwright/src/playwright_registration_form.html"
 FILE_PATH = f"https://htmlpreview.github.io/?{GITHUB_FORM_URL}"
 
-def test_registration_form(page: Page):
+def test_registration_form(page: Page , request):
     # Navigate to the local registration form
     page.goto(FILE_PATH)
     page.pause()
@@ -17,10 +17,14 @@ def test_registration_form(page: Page):
 
     page.pause()
 
-    fillInFullForm(page)
+    fillInFullForm(page, request)
     validateResetForm(page)
-    fillInFullForm(page)
+    fillInFullForm(page, request)
     validateSubmitForm(page)
+    #take screenshot
+    test_name = request.node.name
+    date = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    page.screenshot(path = f"screenshots/{test_name}_{date}.png")
 
 def test_header(page: Page):
     page.goto(FILE_PATH)
@@ -29,7 +33,7 @@ def test_header(page: Page):
     helpLink(page)
     PlaywrightDocsLink(page)
 
-def fillInFullForm(page):
+def fillInFullForm(page, request):
     #TODO: Fill in the first name
     fillInFirstName(page, REGISTRATION_FORM.get('textForFirstName'))
 
@@ -84,7 +88,6 @@ def fillInFullForm(page):
     #TODO: Select 2 checkBox
     selectSubscribeCheckBox(page)
     selecttermsAndConditionsCheckBox(page)
-
 
 
 def printAccessibilityTree(page):
