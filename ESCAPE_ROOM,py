@@ -1,0 +1,48 @@
+def decode_message(message):
+    return message[1]
+
+
+def find_suspicious_accounts(accounts):
+    suspects = []
+    for username, info in accounts.items():
+        if info["failed_logins"] >= 5 and info["location"] == "UNKNOWN":
+            suspects.append(username)
+    return suspects
+
+
+def find_final_digit(candidates):
+    for candidate in candidates:
+        if int(candidate[1]) == 2 and int(candidate[0]) > int(candidate[-1]):
+            return candidate[-1]
+    return None
+
+
+message = "K4P9Z2"
+accounts = {
+    "neo":
+      {"failed_logins": 1,
+        "location": "HQ",
+          "token": "N3O"},
+    "trinity":
+      {"failed_logins": 7,
+        "location": "UNKNOWN",
+          "token": "TR7"},
+    "morpheus":
+      {"failed_logins": 2,
+        "location": "HQ",
+          "token": "M8P"}
+}
+candidates = ["583", "126", "942", "371", "805", "722"]
+
+digit1 = decode_message(message)
+print("Access Digit 1:", digit1)
+
+suspects = find_suspicious_accounts(accounts)
+print("Suspicious account(s):", suspects)
+digit2 = accounts[suspects[0]]["token"][-1]
+print("Access Digit 2:", digit2)
+
+digit3 = find_final_digit(candidates)
+print("Access Digit 3:", digit3)
+print("The access code is: " + digit1 + digit2 + digit3)
+

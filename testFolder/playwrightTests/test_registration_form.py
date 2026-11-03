@@ -184,8 +184,12 @@ def selecttermsAndConditionsCheckBox(page):
     getFormFields(page)["termsAndConditions"].check()
 
 def validateResetForm(page):
-    getFormFields(page).get("resetFormButton").click()
+    resetButton = getFormFields(page).get("resetFormButton")
+    resetButton.click()
     expect(page.get_by_role("status")).to_have_text(REGISTRATION_FORM.get('resetFormButtonStatus'))
+    # take component screenshot of the form after reset
+    resetButton.screenshot(path = f"screenshots/resetFormButton.png")
+    # Verify that all fields are empty or have default values
     expect(getFormFields(page).get("firstName")).to_be_empty()
     expect(getFormFields(page).get("lastName")).to_be_empty()
     expect(getFormFields(page).get("email")).to_be_empty()
